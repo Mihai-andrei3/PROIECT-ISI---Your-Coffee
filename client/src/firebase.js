@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app); // Inițializează baza de date Firestore
 export const auth = getAuth(app);
-export const auth = getAuth(app);
 
 export const addCafe = async (name, address, latitude, longitude) => {
   try {
