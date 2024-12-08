@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBbfX836nd9m3-PS8eeSMQ9KNok5cPPO04",
@@ -13,14 +14,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app); // Inițializează baza de date Firestore
+export const auth = getAuth(app);
 
 export const addCafe = async (name, address, latitude, longitude) => {
   try {
+    const userId = auth.currentUser.uid;
     const docRef = await addDoc(collection(db, "cafes"), {
       name,
       address,
       latitude,
       longitude,
+      userId: userId, // Store the user's ID in the coffee shop document
     });
     console.log("Cafeneaua a fost adăugată cu ID-ul:", docRef.id);
     return docRef.id;
@@ -28,4 +32,17 @@ export const addCafe = async (name, address, latitude, longitude) => {
     console.error("Eroare la adăugarea cafenelei:", error);
     throw error;
   }
+};
+
+// Get coffee shops from Firestore
+export const getCoffeeShops = async () => {
+  const coffeeShopsRef = collection(db, "coffeeShops");
+  const snapshot = await getDocs(coffeeShopsRef);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+// Add a new coffee shop to Firestore
+export const addCoffeeShop = async (newShop) => {
+  const coffeeShopsRef = collection(db, "coffeeShops");
+  await addDoc(coffeeShopsRef, newShop);
 };
