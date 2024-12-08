@@ -1,0 +1,115 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #A67B5C;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #A67B5C;
+  }
+  
+.register-form {
+    background-color: #D0C59A;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+.register-form h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #333;
+  }
+  
+.input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    font-size: 14px;
+  }
+  
+.toggle {
+    position: relative;
+    border: 2px solid #104730;
+    border-radius: 55px;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    overflow: hidden;
+    width: 100%; /* Match input field width */
+  }
+.toggle label {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #104730;
+  }
+  
+.toggle #flap {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    background-color: #104730;
+    transition: transform 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+  }
+  
+.toggle input[type="radio"] {
+    display: none;
+  }
+  
+.toggle input#admin:checked ~ #flap {
+    transform: translateX(0);
+  }
+  
+.toggle input#client:checked ~ #flap {
+    transform: translateX(100%);
+  }
+  
+.button {
+    width: 100%;
+    padding: 12px;
+    background-color: #104730;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  
+.error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+.login-link {
+    color: #104730;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  

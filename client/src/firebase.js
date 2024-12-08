@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBbfX836nd9m3-PS8eeSMQ9KNok5cPPO04",
@@ -13,6 +14,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app); // Inițializează baza de date Firestore
+export const auth = getAuth(app);
 
 export const addCafe = async (name, address, latitude, longitude) => {
   try {
