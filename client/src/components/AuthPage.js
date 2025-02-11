@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase"; // Adjust the import path as necessary
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase"; 
 
 const AuthPage = () => {
   const [email, setEmail] = useState('');
@@ -23,16 +24,19 @@ const AuthPage = () => {
     setError(null);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // Redirect or handle successful login based on role
-      if (role === 'admin') {
-        console.log('Logged in as admin');
-        // Redirect to admin dashboard
-        navigate('/admin-dashboard');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch the user's role from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+
+      if (userData.role === 'admin') {
+        navigate('/Coffees');
+      } else if (userData.role === 'client') {
+        navigate('/MycoffeeShop');
       } else {
-        console.log('Logged in as client');
-        // Redirect to client dashboard
-        navigate('/client-dashboard');
+        setError('Invalid user role');
       }
     } catch (err) {
       setError(err.message);
@@ -109,13 +113,13 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#333',
+    backgroundColor: '#A67B5C',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#D0C59A',
     padding: '30px',
     borderRadius: '10px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
@@ -125,13 +129,6 @@ const styles = {
     marginBottom: '20px',
     fontSize: '24px',
     textAlign: 'center',
-    color: '#333',
-  },
-  error: {
-    color: 'red',
-    fontSize: '14px',
-    textAlign: 'center',
-    marginBottom: '10px',
   },
   input: {
     width: '100%',
@@ -144,7 +141,7 @@ const styles = {
   },
   toggleContainer: {
     position: 'relative',
-    border: '2px solid #04da97',
+    border: '2px solid #104730',
     borderRadius: '55px',
     display: 'flex',
     justifyContent: 'space-between',
@@ -161,14 +158,14 @@ const styles = {
     padding: '10px',
     cursor: 'pointer',
     fontWeight: 'bold',
-    color: '#04da97',
+    color: '#104730',
   },
   flap: {
     position: 'absolute',
     top: 0,
     height: '100%',
     width: '50%',
-    backgroundColor: '#04da97',
+    backgroundColor: '#104730',
     transition: 'transform 0.4s ease',
     display: 'flex',
     justifyContent: 'center',
@@ -184,7 +181,7 @@ const styles = {
     padding: '12px',
     borderRadius: '5px',
     border: 'none',
-    backgroundColor: '#04da97',
+    backgroundColor: '#104730',
     color: '#fff',
     cursor: 'pointer',
     fontSize: '16px',
@@ -195,7 +192,7 @@ const styles = {
     padding: '12px',
     borderRadius: '5px',
     border: 'none',
-    backgroundColor: '#28a745',
+    backgroundColor: '#6D9775',
     color: '#fff',
     cursor: 'pointer',
     fontSize: '16px',

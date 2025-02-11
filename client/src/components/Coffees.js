@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import { db, auth } from "../firebase"; // Adjust the import path as necessary
-import Navbar from "../components/Navbar"; // Import the Navbar component
+import { db, auth } from "../firebase"; 
+import Navbar from "../components/Navbar"; 
 
 const Coffees = () => {
   const [coffeeShops, setCoffeeShops] = useState([]);
@@ -14,7 +14,6 @@ const Coffees = () => {
   });
   const userId = auth.currentUser ? auth.currentUser.uid : null;
 
-  // Fetch coffee shops from Firestore on page load
   // Fetch coffee shops only for the logged-in user
   useEffect(() => {
     if (userId) {
@@ -84,7 +83,7 @@ const Coffees = () => {
 
   return (
     <div style={styles.container}>
-      <Navbar /> {/* Add Navbar here */}
+      <Navbar /> {}
 
       <div style={styles.content}>
         <div style={styles.coffeeList}>

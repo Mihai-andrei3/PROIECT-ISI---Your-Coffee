@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase"; 
 
-const Navbar = () => {
+const ClientNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,17 +21,14 @@ const Navbar = () => {
       <nav style={styles.navbar}>
         <ul style={styles.navList}>
           <li style={styles.navItem}>
-            <Link to="/coffees" style={styles.navLink}>Coffees</Link>
+            <Link to="/MycoffeeShop" style={styles.navLink}>CoffeeShops</Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/reviews" style={styles.navLink}>Reviews</Link>
+            <Link to="/myRewards" style={styles.navLink}>MyRewards</Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/offers" style={styles.navLink}>Offers</Link>
+            <Link to="/ClientMap" style={styles.navLink}>Map</Link>
           </li>
-          <li style={styles.navItem}>
-            <Link to="/MyMap" style={styles.navLink}>MyMap</Link>
-            </li>
           <li style={{ ...styles.navItem, marginLeft: "auto" }}>
             <button onClick={handleLogout} style={styles.logoutButton}>Log Out</button>
           </li>
@@ -43,13 +40,13 @@ const Navbar = () => {
 
 const styles = {
   container: {
-    width: "100%",  
-    margin: 0,      
-    padding: 0,    
+    width: "100%", 
+    margin: 0,
+    padding: 0, 
     position: "absolute", 
-    left: 0,        
-    top: 0,         
-    zIndex: 1000,   
+    left: 0, 
+    top: 0, 
+    zIndex: 1000, 
   },
   navbar: {
     display: "flex",
@@ -57,7 +54,7 @@ const styles = {
     alignItems: "center",
     backgroundColor: "#333",
     padding: "10px 20px",
-    width: "100%",  
+    width: "100%", 
     boxSizing: "border-box", 
   },
   navList: {
@@ -86,4 +83,4 @@ const styles = {
   },
 };
 
-export default Navbar;
+export default ClientNavbar;

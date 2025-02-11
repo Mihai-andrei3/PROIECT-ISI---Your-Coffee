@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase"; // Adjust the import path as necessary
-import "./RegisterPage.css"; // Add the CSS file for your custom radio buttons
+import { auth, db } from "../firebase"; 
+import "./RegisterPage.css"; 
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -56,9 +56,9 @@ const RegisterPage = () => {
       console.log("User registered successfully");
 
       if (role === "admin") {
-        navigate("/admin-dashboard");
+        navigate("/Coffees");
       } else {
-        navigate("/client-dashboard");
+        navigate("/MycoffeeShop");
       }
     } catch (err) {
       switch (err.code) {

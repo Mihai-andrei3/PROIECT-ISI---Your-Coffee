@@ -1,42 +1,83 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase"; // Adjust the import path as necessary
+import React, { useState, useEffect } from "react";
+import { collection, query, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
+import AdminNavbar from "./Navbar"; // Import the admin navbar component
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogout = async () => {
+  // Fetch all offers from Firestore
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        const offersQuery = query(collection(db, "offers"));
+        const querySnapshot = await getDocs(offersQuery);
+        const fetchedOffers = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log("Fetched offers:", fetchedOffers); // Log fetched offers
+        setOffers(fetchedOffers);
+      } catch (error) {
+        console.error("Error fetching offers: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOffers();
+  }, []);
+
+  // Delete an offer
+  const deleteOffer = async (offerId) => {
     try {
-      await signOut(auth);
-      navigate("/");
+      await deleteDoc(doc(db, "offers", offerId));
+      setOffers((prevOffers) => prevOffers.filter((offer) => offer.id !== offerId));
+      alert("Offer deleted successfully!");
     } catch (error) {
-      console.error("Error logging out: ", error);
+      console.error("Error deleting offer:", error);
+      alert("Failed to delete the offer.");
     }
   };
 
+  if (loading) {
+    return (
+      <div style={styles.container}>
+        <AdminNavbar />
+        <div style={styles.content}>
+          <h2>Loading offers...</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.container}>
-      <nav style={styles.navbar}>
-      <ul style={styles.navList}>
-          <li style={styles.navItem}>
-            <Link to="/coffees" style={styles.navLink}>Coffees</Link>
-          </li>
-          <li style={styles.navItem}>
-            <Link to="/reviews" style={styles.navLink}>Reviews</Link>
-          </li>
-          <li style={styles.navItem}>
-            <Link to="/offers" style={styles.navLink}>Offers</Link>
-          </li>
-          <li style={{ ...styles.navItem, marginLeft: "auto" }}>
-            <button onClick={handleLogout} style={styles.logoutButton}>Log Out</button>
-          </li>
-        </ul>
-      </nav>
-      <div style={styles.pageContent}>
-        <h1>Admin Dashboard</h1>
-        <p>Welcome to the admin dashboard.</p>
+      <AdminNavbar />
+      <div style={styles.content}>
+        <h1 style={styles.title}>Manage Offers</h1>
+        <div style={styles.offersGrid}>
+          {offers.length > 0 ? (
+            offers.map((offer) => (
+              <div key={offer.id} style={styles.offerCard}>
+                <h3 style={styles.offerName}>{offer.name}</h3>
+                <p style={styles.offerDescription}>{offer.description}</p>
+                <p style={styles.offerPoints}>
+                  <strong>Points Required:</strong> {offer.points}
+                </p>
+                <button
+                  style={styles.deleteButton}
+                  onClick={() => deleteOffer(offer.id)}
+                >
+                  Delete Offer
+                </button>
+              </div>
+            ))
+          ) : (
+            <p style={styles.noOffers}>No offers available.</p>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -44,41 +85,62 @@ const AdminDashboard = () => {
 
 const styles = {
   container: {
-    fontFamily: "'Arial', sans-serif",
-  },
-  navbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#333",
-    padding: "10px 20px",
-  },
-  navList: {
-    display: "flex",
-    listStyleType: "none",
-    margin: 0,
-    padding: 0,
     width: "100%",
+    minHeight: "100vh",
+    backgroundColor: "#f4f4f9",
+    fontFamily: "Arial, sans-serif",
+    paddingTop: "80px", 
   },
-  navItem: {
-    margin: "0 15px",
-  },
-  navLink: {
-    color: "#fff",
-    textDecoration: "none",
-    fontSize: "18px",
-  },
-  logoutButton: {
-    backgroundColor: "#ff4d4d",
-    color: "#fff",
-    border: "none",
-    padding: "10px 20px",
-    cursor: "pointer",
-    borderRadius: "5px",
-    fontSize: "16px",
-  },
-  pageContent: {
+  content: {
+    maxWidth: "800px",
+    margin: "0 auto",
     padding: "20px",
+    textAlign: "center",
+  },
+  title: {
+    fontSize: "2rem",
+    color: "#333",
+    marginBottom: "20px",
+  },
+  offersGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "20px",
+  },
+  offerCard: {
+    backgroundColor: "#fff",
+    padding: "15px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    textAlign: "left",
+  },
+  offerName: {
+    fontSize: "1.5rem",
+    color: "#333",
+    marginBottom: "10px",
+  },
+  offerDescription: {
+    fontSize: "1rem",
+    color: "#666",
+    marginBottom: "10px",
+  },
+  offerPoints: {
+    fontSize: "1rem",
+    color: "#777",
+  },
+  deleteButton: {
+    marginTop: "15px",
+    padding: "10px",
+    backgroundColor: "#ff4d4d",
+    border: "none",
+    borderRadius: "5px",
+    color: "#fff",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  noOffers: {
+    fontSize: "1.2rem",
+    color: "#999",
   },
 };
 

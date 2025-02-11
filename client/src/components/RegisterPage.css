@@ -36,7 +36,7 @@ html, body {
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    box-sizing: border-box; 
     font-size: 14px;
   }
   
@@ -48,7 +48,7 @@ html, body {
     justify-content: space-between;
     margin: 20px 0;
     overflow: hidden;
-    width: 100%; /* Match input field width */
+    width: 100%; 
   }
 .toggle label {
     flex: 1;
